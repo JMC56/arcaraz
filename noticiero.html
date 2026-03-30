@@ -35,16 +35,12 @@ body::before{
 
 .hero h1{
   font-size:70px;
-  background:linear-gradient(90deg,#ff0000,#ff4d4d);
-  -webkit-background-clip:text;
-  color:transparent;
+  color:#ff0000;
+  text-shadow:0 0 20px red,0 0 60px red;
   animation:glow 2s infinite alternate;
 }
 
-.hero p{
-  color:#aaa;
-  margin-top:10px;
-}
+.hero p{color:#aaa;}
 
 /* GRID */
 .grid{
@@ -57,13 +53,13 @@ body::before{
 
 /* CARD */
 .card{
-  width:320px;
-  background:rgba(20,20,20,0.8);
-  border-radius:20px;
+  width:260px;
+  background:#111;
+  border-radius:15px;
   overflow:hidden;
-  backdrop-filter:blur(10px);
   border:1px solid rgba(255,0,0,0.2);
   transition:0.4s;
+  cursor:pointer;
 }
 
 .card:hover{
@@ -71,30 +67,46 @@ body::before{
   box-shadow:0 0 25px red;
 }
 
-.card img{
+/* MEDIA */
+.card img,
+.card video{
   width:100%;
-  height:200px;
-  object-fit:cover;
+  height:auto;
+  object-fit:contain;
 }
 
-.card-content{
-  padding:15px;
+.card-content{padding:10px;}
+.card h3{color:red;}
+.card p{color:#ccc;font-size:13px;}
+
+/* MODAL */
+.modal{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.95);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  flex-direction:column;
 }
 
-.card h3{
-  color:#ff0000;
-  margin-bottom:10px;
+.modal img,
+.modal video,
+.modal iframe{
+  max-width:90%;
+  max-height:80%;
+  border-radius:20px;
+  box-shadow:0 0 50px red;
 }
 
-.card p{
-  color:#ccc;
-  font-size:14px;
-}
-
-/* ANIMACION */
+/* ANIM */
 @keyframes glow{
-  from{filter:drop-shadow(0 0 5px red);}
-  to{filter:drop-shadow(0 0 25px red);}
+  from{filter:drop-shadow(0 0 10px red);}
+  to{filter:drop-shadow(0 0 30px red);}
 }
 </style>
 </head>
@@ -108,18 +120,18 @@ body::before{
 
 <div class="grid" id="news"></div>
 
+<div class="modal" id="modal" onclick="closeModal()">
+  <div id="modalContent"></div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCnL_0Xc9ekk_kBcp-wCTBDAhQVu2u4wz4",
-  authDomain: "vps1-ec6a1.firebaseapp.com",
-  projectId: "vps1-ec6a1",
-  storageBucket: "vps1-ec6a1.firebasestorage.app",
-  messagingSenderId: "204349845179",
-  appId: "1:204349845179:web:d864250ace6c7b72b9439e",
-  measurementId: "G-07PRMWGY3E"
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_DOMINIO",
+  projectId: "TU_PROJECT_ID"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -133,9 +145,25 @@ onSnapshot(collection(db,"news"), snapshot=>{
   snapshot.forEach(doc=>{
     const data = doc.data();
 
+    let media = "";
+
+    // VIDEO YOUTUBE
+    if(data.video && data.video.includes("youtube")){
+      const videoId = data.video.split("v=")[1]?.split("&")[0];
+      media = `<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+    }
+    // VIDEO NORMAL
+    else if(data.video){
+      media = `<video src="${data.video}" controls></video>`;
+    }
+    // IMAGEN
+    else if(data.image){
+      media = `<img src="${data.image}">`;
+    }
+
     container.innerHTML += `
-      <div class="card">
-        <img src="${data.image}">
+      <div class="card" onclick='openModal(${JSON.stringify(data)})'>
+        ${media}
         <div class="card-content">
           ${data.title ? `<h3>${data.title}</h3>` : ""}
           ${data.text ? `<p>${data.text}</p>` : ""}
@@ -144,6 +172,37 @@ onSnapshot(collection(db,"news"), snapshot=>{
     `;
   });
 });
+
+/* MODAL */
+window.openModal = function(data){
+  const modal = document.getElementById("modal");
+  const content = document.getElementById("modalContent");
+
+  let media = "";
+
+  if(data.video && data.video.includes("youtube")){
+    const videoId = data.video.split("v=")[1]?.split("&")[0];
+    media = `<iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
+  }
+  else if(data.video){
+    media = `<video src="${data.video}" controls autoplay></video>`;
+  }
+  else if(data.image){
+    media = `<img src="${data.image}">`;
+  }
+
+  content.innerHTML = `
+    ${media}
+    ${data.title ? `<h3 style="color:red;margin-top:20px;">${data.title}</h3>` : ""}
+    ${data.text ? `<p style="color:#ccc;">${data.text}</p>` : ""}
+  `;
+
+  modal.style.display="flex";
+}
+
+window.closeModal = function(){
+  document.getElementById("modal").style.display="none";
+}
 </script>
 
 </body>
