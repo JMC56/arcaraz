@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Noticiero - Arcaraz</title>
 
-<link rel="icon" href="favicon.jpeg">
+<link rel="icon" href="assets/favicon.ico">
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
@@ -38,9 +38,7 @@ nav{
   backdrop-filter:blur(10px);
 }
 
-nav img{
-  height:50px;
-}
+nav img{height:50px;}
 
 /* HERO */
 .hero{
@@ -113,7 +111,14 @@ nav img{
 }
 
 .views span{
-  font-size:14px;
+  transition:0.3s;
+}
+
+/* ANIMACION VISTAS */
+.bump{
+  color:red;
+  transform:scale(1.3);
+  text-shadow:0 0 10px red;
 }
 
 /* MODAL */
@@ -179,6 +184,7 @@ const db = getFirestore(app);
 
 const container = document.getElementById("news");
 
+/* CARGAR NOTICIAS */
 onSnapshot(collection(db,"news"), snapshot=>{
   container.innerHTML = "";
 
@@ -205,9 +211,9 @@ onSnapshot(collection(db,"news"), snapshot=>{
         <div class="card-content">
           ${data.title ? `<h3>${data.title}</h3>` : ""}
           ${data.text ? `<p>${data.text}</p>` : ""}
-          
+
           <div class="views">
-            👁️ <span>${data.views || 0}</span>
+            👁️ <span data-id="${id}">${data.views || 0}</span>
           </div>
         </div>
       </div>
@@ -241,11 +247,21 @@ window.openModal = async function(data, id){
 
   modal.style.display="flex";
 
-  /* SUMAR VISTA */
+  /* SUMAR VISTA EN FIREBASE */
   const ref = doc(db,"news",id);
   await updateDoc(ref,{
     views: increment(1)
   });
+
+  /* ACTUALIZAR EN PANTALLA INSTANTE */
+  const el = document.querySelector(`[data-id="${id}"]`);
+  if(el){
+    let num = parseInt(el.innerText) || 0;
+    el.innerText = num + 1;
+
+    el.classList.add("bump");
+    setTimeout(()=>el.classList.remove("bump"),300);
+  }
 }
 
 window.closeModal = function(){
