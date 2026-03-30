@@ -2,45 +2,95 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Admin - Noticias</title>
+<title>Admin - Arcaraz</title>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
+
 body{
   background:#000;
   color:white;
-  text-align:center;
-  font-family:sans-serif;
-  padding:50px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
 }
 
+/* CONTENEDOR */
+.panel{
+  background:rgba(20,20,20,0.9);
+  padding:40px;
+  border-radius:20px;
+  border:1px solid rgba(255,0,0,0.3);
+  backdrop-filter:blur(10px);
+  box-shadow:0 0 30px rgba(255,0,0,0.2);
+  text-align:center;
+  width:350px;
+}
+
+/* TITULO */
+h1{
+  margin-bottom:20px;
+  color:#ff0000;
+  text-shadow:0 0 20px red;
+}
+
+/* INPUTS */
 input{
-  width:300px;
+  width:100%;
   padding:12px;
-  margin:10px;
+  margin:10px 0;
   border-radius:10px;
   border:none;
+  background:#111;
+  color:white;
+  outline:none;
+  border:1px solid rgba(255,0,0,0.2);
 }
 
+/* BOTON */
 button{
-  padding:12px 30px;
+  width:100%;
+  padding:12px;
+  margin-top:10px;
   background:red;
   border:none;
   color:white;
   border-radius:10px;
   cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  background:#ff3333;
+  box-shadow:0 0 15px red;
+}
+
+/* TEXTO */
+small{
+  display:block;
+  margin-top:10px;
+  color:#888;
 }
 </style>
 </head>
 
 <body>
 
-<h1>Subir Noticia</h1>
+<div class="panel">
+  <h1>Panel Noticias</h1>
 
-<input id="image" placeholder="URL imagen (obligatorio)">
-<input id="title" placeholder="Título (opcional)">
-<input id="text" placeholder="Texto (opcional)">
-<br>
-<button onclick="addNews()">Subir</button>
+  <input id="image" placeholder="URL imagen (opcional)">
+  <input id="video" placeholder="URL video (opcional)">
+  <input id="title" placeholder="Título (opcional)">
+  <input id="text" placeholder="Texto (opcional)">
+
+  <button onclick="addNews()">Publicar</button>
+
+  <small>⚠️ Debes poner imagen o video</small>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
@@ -49,11 +99,7 @@ import { getFirestore, collection, addDoc } from "https://www.gstatic.com/fireba
 const firebaseConfig = {
   apiKey: "AIzaSyCnL_0Xc9ekk_kBcp-wCTBDAhQVu2u4wz4",
   authDomain: "vps1-ec6a1.firebaseapp.com",
-  projectId: "vps1-ec6a1",
-  storageBucket: "vps1-ec6a1.firebasestorage.app",
-  messagingSenderId: "204349845179",
-  appId: "1:204349845179:web:d864250ace6c7b72b9439e",
-  measurementId: "G-07PRMWGY3E"
+  projectId: "vps1-ec6a1"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -61,22 +107,32 @@ const db = getFirestore(app);
 
 window.addNews = async function(){
 
-  const image = document.getElementById("image").value;
-  const title = document.getElementById("title").value;
-  const text = document.getElementById("text").value;
+  const image = document.getElementById("image").value.trim();
+  const video = document.getElementById("video").value.trim();
+  const title = document.getElementById("title").value.trim();
+  const text = document.getElementById("text").value.trim();
 
-  if(!image){
-    alert("La imagen es obligatoria");
+  // VALIDACION PRO
+  if(!image && !video){
+    alert("Debes agregar una imagen o un video");
     return;
   }
 
   await addDoc(collection(db,"news"),{
-    image,
-    title,
-    text
+    image: image || "",
+    video: video || "",
+    title: title || "",
+    text: text || "",
+    createdAt: Date.now()
   });
 
-  alert("Noticia subida 🚀");
+  alert("🔥 Noticia publicada");
+
+  // LIMPIAR CAMPOS
+  document.getElementById("image").value="";
+  document.getElementById("video").value="";
+  document.getElementById("title").value="";
+  document.getElementById("text").value="";
 }
 </script>
 
