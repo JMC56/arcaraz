@@ -2,9 +2,9 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Noticiero - Arcaraz</title>
-
-<link rel="icon" href="assets/favicon.ico">
+<link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
@@ -13,142 +13,188 @@
 
 body{
   background:#000;
-  color:white;
+  color:#fff;
   overflow-x:hidden;
 }
 
-/* FONDO */
 body::before{
   content:'';
   position:fixed;
-  width:100%;
-  height:100%;
+  inset:0;
   background:
-    radial-gradient(circle at 20% 20%, rgba(255,0,0,0.2), transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(255,0,0,0.1), transparent 40%);
+    radial-gradient(circle at 20% 20%, rgba(255,0,0,.20), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(255,0,0,.10), transparent 40%);
   z-index:-1;
 }
 
-/* NAV */
 nav{
   display:flex;
+  align-items:center;
   justify-content:space-between;
   padding:20px 60px;
-  background:rgba(0,0,0,0.7);
-  backdrop-filter:blur(10px);
+  background:rgba(0,0,0,.7);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,0,0,.12);
 }
 
-nav img{height:50px;}
+nav img{
+  height:52px;
+}
 
-/* HERO */
 .hero{
   text-align:center;
-  padding:100px 20px;
+  padding:90px 20px 40px;
 }
 
 .hero h1{
-  font-size:70px;
-  background:linear-gradient(90deg,#ff0000,#ff4d4d);
+  font-size:72px;
+  background:linear-gradient(90deg,#ff0000,#ff6666);
   -webkit-background-clip:text;
   color:transparent;
   animation:glow 2s infinite alternate;
 }
 
-/* GRID */
+.hero p{
+  color:#aaa;
+  margin-top:12px;
+  font-size:17px;
+}
+
 .grid{
   display:flex;
   flex-wrap:wrap;
   gap:30px;
   justify-content:center;
-  padding:50px;
+  padding:40px 50px 80px;
 }
 
-/* CARD */
 .card{
-  width:280px;
-  background:#111;
-  border-radius:20px;
+  width:300px;
+  background:linear-gradient(180deg,#121212,#090909);
+  border-radius:22px;
   overflow:hidden;
-  border:1px solid rgba(255,0,0,0.2);
-  transition:0.4s;
+  border:1px solid rgba(255,0,0,.18);
+  transition:.35s;
   cursor:pointer;
+  box-shadow:0 0 0 rgba(255,0,0,0);
 }
 
 .card:hover{
-  transform:translateY(-10px) scale(1.05);
-  box-shadow:0 0 30px red;
+  transform:translateY(-8px) scale(1.03);
+  box-shadow:0 0 28px rgba(255,0,0,.35);
 }
 
-/* MEDIA */
+.card-media{
+  width:100%;
+  background:#000;
+}
+
 .card img,
 .card video,
 .card iframe{
   width:100%;
+  display:block;
+  border:0;
 }
 
-/* CONTENIDO */
 .card-content{
-  padding:15px;
+  padding:14px 16px 16px;
 }
 
 .card h3{
-  color:red;
-  margin-bottom:10px;
+  color:#ff3c3c;
+  margin-bottom:8px;
+  font-size:18px;
 }
 
 .card p{
-  color:#ccc;
-  font-size:14px;
+  color:#d0d0d0;
+  font-size:13px;
+  line-height:1.55;
 }
 
-/* VISTAS */
 .views{
   display:flex;
   align-items:center;
-  gap:6px;
-  color:#aaa;
-  margin-top:10px;
+  gap:8px;
+  margin-top:12px;
+  color:#d8d8d8;
+  font-size:14px;
 }
 
-.views span{
-  transition:0.3s;
+.eye{
+  color:#fff;
+  font-size:15px;
 }
 
-/* ANIMACION VISTAS */
 .bump{
-  color:red;
-  transform:scale(1.3);
+  color:#ff4d4d !important;
+  transform:scale(1.2);
   text-shadow:0 0 10px red;
+  transition:.25s;
 }
 
-/* MODAL */
 .modal{
   position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.95);
+  inset:0;
+  background:rgba(0,0,0,.96);
   display:none;
   align-items:center;
   justify-content:center;
   z-index:9999;
-  flex-direction:column;
+  padding:30px;
+}
+
+.modal-box{
+  max-width:1000px;
+  width:100%;
+  text-align:center;
 }
 
 .modal img,
 .modal video,
 .modal iframe{
-  max-width:90%;
-  max-height:80%;
-  border-radius:20px;
-  box-shadow:0 0 50px red;
+  max-width:100%;
+  max-height:78vh;
+  border-radius:24px;
+  box-shadow:0 0 45px rgba(255,0,0,.40);
+  border:0;
 }
 
-/* ANIM */
+.modal h3{
+  color:#ff3c3c;
+  margin-top:18px;
+  font-size:24px;
+}
+
+.modal p{
+  color:#d0d0d0;
+  margin-top:10px;
+  line-height:1.7;
+}
+
+.close-btn{
+  position:absolute;
+  top:18px;
+  right:22px;
+  background:#160000;
+  color:#fff;
+  border:1px solid rgba(255,0,0,.35);
+  border-radius:12px;
+  padding:10px 14px;
+  cursor:pointer;
+}
+
+.empty{
+  color:#aaa;
+  text-align:center;
+  padding:40px;
+  width:100%;
+}
+
 @keyframes glow{
-  from{filter:drop-shadow(0 0 10px red);}
-  to{filter:drop-shadow(0 0 30px red);}
+  from{filter:drop-shadow(0 0 8px red);}
+  to{filter:drop-shadow(0 0 28px red);}
 }
 </style>
 </head>
@@ -156,117 +202,155 @@ nav img{height:50px;}
 <body>
 
 <nav>
-  <img src="assets/logo.png">
+  <img src="assets/logo.png" alt="Logo">
 </nav>
 
 <div class="hero">
   <h1>NOTICIERO</h1>
+  <p>Actualizaciones en tiempo real</p>
 </div>
 
 <div class="grid" id="news"></div>
 
-<div class="modal" id="modal" onclick="closeModal()">
-  <div id="modalContent"></div>
+<div class="modal" id="modal">
+  <button class="close-btn" onclick="closeModal()">Cerrar</button>
+  <div class="modal-box" id="modalContent"></div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import { getFirestore, collection, onSnapshot, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  doc,
+  updateDoc,
+  increment
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCnL_0Xc9ekk_kBcp-wCTBDAhQVu2u4wz4",
   authDomain: "vps1-ec6a1.firebaseapp.com",
-  projectId: "vps1-ec6a1"
+  projectId: "vps1-ec6a1",
+  storageBucket: "vps1-ec6a1.firebasestorage.app",
+  messagingSenderId: "204349845179",
+  appId: "1:204349845179:web:d864250ace6c7b72b9439e",
+  measurementId: "G-07PRMWGY3E"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const container = document.getElementById("news");
+const modal = document.getElementById("modal");
+const modalContent = document.getElementById("modalContent");
 
-/* CARGAR NOTICIAS */
-onSnapshot(collection(db,"news"), snapshot=>{
+function getYoutubeId(url) {
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes("youtu.be")) return u.pathname.slice(1);
+    if (u.searchParams.get("v")) return u.searchParams.get("v");
+    return "";
+  } catch {
+    return "";
+  }
+}
+
+function mediaHtml(data, modalMode = false) {
+  if (data.video) {
+    const yt = getYoutubeId(data.video);
+    if (yt) {
+      return `<iframe
+        src="https://www.youtube.com/embed/${yt}${modalMode ? '?autoplay=1' : ''}"
+        allowfullscreen
+        loading="lazy"
+        ${modalMode ? 'style="width:100%;aspect-ratio:16/9;"' : 'style="aspect-ratio:16/9;"'}
+      ></iframe>`;
+    }
+    return `<video src="${data.video}" ${modalMode ? 'controls autoplay' : 'muted playsinline'}></video>`;
+  }
+
+  if (data.image) {
+    return `<img src="${data.image}" alt="Noticia">`;
+  }
+
+  return `<div class="empty">Sin contenido visual</div>`;
+}
+
+async function addView(id) {
+  const ref = doc(db, "news", id);
+  await updateDoc(ref, {
+    views: increment(1)
+  });
+}
+
+function bumpView(id) {
+  const el = document.querySelector(`[data-id="${id}"]`);
+  if (!el) return;
+  const current = parseInt(el.textContent || "0", 10);
+  el.textContent = current + 1;
+  el.classList.add("bump");
+  setTimeout(() => el.classList.remove("bump"), 300);
+}
+
+window.openModal = async function(data, id) {
+  modalContent.innerHTML = `
+    ${mediaHtml(data, true)}
+    ${data.title ? `<h3>${data.title}</h3>` : ""}
+    ${data.text ? `<p>${data.text}</p>` : ""}
+  `;
+  modal.style.display = "flex";
+
+  try {
+    await addView(id);
+    bumpView(id);
+  } catch (err) {
+    console.error("No se pudo sumar la vista:", err);
+  }
+};
+
+window.closeModal = function() {
+  modal.style.display = "none";
+  modalContent.innerHTML = "";
+};
+
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) closeModal();
+});
+
+onSnapshot(collection(db, "news"), (snapshot) => {
   container.innerHTML = "";
 
-  snapshot.forEach(docSnap=>{
+  if (snapshot.empty) {
+    container.innerHTML = `<div class="empty">No hay noticias todavía.</div>`;
+    return;
+  }
+
+  snapshot.forEach((docSnap) => {
     const data = docSnap.data();
     const id = docSnap.id;
 
-    let media = "";
+    const card = document.createElement("div");
+    card.className = "card";
+    card.onclick = () => openModal(data, id);
 
-    if(data.video && data.video.includes("youtube")){
-      const vid = data.video.split("v=")[1]?.split("&")[0];
-      media = `<iframe src="https://www.youtube.com/embed/${vid}"></iframe>`;
-    }
-    else if(data.video){
-      media = `<video src="${data.video}" muted></video>`;
-    }
-    else if(data.image){
-      media = `<img src="${data.image}">`;
-    }
-
-    container.innerHTML += `
-      <div class="card" onclick='openModal(${JSON.stringify(data)}, "${id}")'>
-        ${media}
-        <div class="card-content">
-          ${data.title ? `<h3>${data.title}</h3>` : ""}
-          ${data.text ? `<p>${data.text}</p>` : ""}
-
-          <div class="views">
-            👁️ <span data-id="${id}">${data.views || 0}</span>
-          </div>
+    card.innerHTML = `
+      <div class="card-media">
+        ${mediaHtml(data, false)}
+      </div>
+      <div class="card-content">
+        ${data.title ? `<h3>${data.title}</h3>` : ""}
+        ${data.text ? `<p>${data.text}</p>` : ""}
+        <div class="views">
+          <span class="eye">👁</span>
+          <span data-id="${id}">${data.views || 0}</span>
         </div>
       </div>
     `;
+
+    container.appendChild(card);
   });
 });
-
-/* MODAL + SUMAR VISTA */
-window.openModal = async function(data, id){
-  const modal = document.getElementById("modal");
-  const content = document.getElementById("modalContent");
-
-  let media = "";
-
-  if(data.video && data.video.includes("youtube")){
-    const vid = data.video.split("v=")[1]?.split("&")[0];
-    media = `<iframe src="https://www.youtube.com/embed/${vid}" allowfullscreen></iframe>`;
-  }
-  else if(data.video){
-    media = `<video src="${data.video}" controls autoplay></video>`;
-  }
-  else if(data.image){
-    media = `<img src="${data.image}">`;
-  }
-
-  content.innerHTML = `
-    ${media}
-    ${data.title ? `<h3 style="color:red;margin-top:20px;">${data.title}</h3>` : ""}
-    ${data.text ? `<p style="color:#ccc;">${data.text}</p>` : ""}
-  `;
-
-  modal.style.display="flex";
-
-  /* SUMAR VISTA EN FIREBASE */
-  const ref = doc(db,"news",id);
-  await updateDoc(ref,{
-    views: increment(1)
-  });
-
-  /* ACTUALIZAR EN PANTALLA INSTANTE */
-  const el = document.querySelector(`[data-id="${id}"]`);
-  if(el){
-    let num = parseInt(el.innerText) || 0;
-    el.innerText = num + 1;
-
-    el.classList.add("bump");
-    setTimeout(()=>el.classList.remove("bump"),300);
-  }
-}
-
-window.closeModal = function(){
-  document.getElementById("modal").style.display="none";
-}
 </script>
 
 </body>
