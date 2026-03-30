@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Admin - Noticias</title>
+
+<style>
+body{
+  background:#000;
+  color:white;
+  text-align:center;
+  font-family:sans-serif;
+  padding:50px;
+}
+
+input{
+  width:300px;
+  padding:12px;
+  margin:10px;
+  border-radius:10px;
+  border:none;
+}
+
+button{
+  padding:12px 30px;
+  background:red;
+  border:none;
+  color:white;
+  border-radius:10px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Subir Noticia</h1>
+
+<input id="image" placeholder="URL imagen (obligatorio)">
+<input id="title" placeholder="Título (opcional)">
+<input id="text" placeholder="Texto (opcional)">
+<br>
+<button onclick="addNews()">Subir</button>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCnL_0Xc9ekk_kBcp-wCTBDAhQVu2u4wz4",
+  authDomain: "vps1-ec6a1.firebaseapp.com",
+  projectId: "vps1-ec6a1",
+  storageBucket: "vps1-ec6a1.firebasestorage.app",
+  messagingSenderId: "204349845179",
+  appId: "1:204349845179:web:d864250ace6c7b72b9439e",
+  measurementId: "G-07PRMWGY3E"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.addNews = async function(){
+
+  const image = document.getElementById("image").value;
+  const title = document.getElementById("title").value;
+  const text = document.getElementById("text").value;
+
+  if(!image){
+    alert("La imagen es obligatoria");
+    return;
+  }
+
+  await addDoc(collection(db,"news"),{
+    image,
+    title,
+    text
+  });
+
+  alert("Noticia subida 🚀");
+}
+</script>
+
+</body>
+</html>
