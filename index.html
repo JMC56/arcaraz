@@ -125,11 +125,16 @@ nav ul li:hover{
 .btn{
   margin-top:25px;
   padding:15px 40px;
-  background:#555;
+  background:#ff0000;
   border:none;
   border-radius:30px;
-  color:#ccc;
-  cursor:not-allowed;
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.btn:hover{
+  box-shadow:0 0 15px red;
 }
 
 /* IMAGEN */
@@ -212,11 +217,27 @@ h2{
   border-radius:20px;
   width:280px;
   text-align:center;
+  border:1px solid #220000;
+  transition:0.3s;
+}
+
+.price:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 25px red;
+}
+
+.price img{
+  width:80px;
+  margin-bottom:10px;
 }
 
 .price h3{
   color:#ff0000;
-  font-size:35px;
+  font-size:30px;
+}
+
+.price p{
+  color:#ccc;
 }
 
 /* RESEÑAS */
@@ -245,6 +266,11 @@ h2{
 
 @keyframes scroll{
   100%{transform:translateX(-50%)}
+}
+
+/* TIKTOK */
+#tiktok{
+  background:linear-gradient(180deg,#000,#050000);
 }
 </style>
 </head>
@@ -279,7 +305,7 @@ h2{
       <div class="check"><div class="check-icon">✔</div><span>Alta tasa de victorias</span></div>
     </div>
 
-    <button class="btn">NO DISPONIBLE</button>
+    <button class="btn" onclick="buy()">COMPRAR</button>
   </div>
 
   <div class="hero-img">
@@ -301,8 +327,21 @@ h2{
 <section id="precios">
   <h2>PRECIOS</h2>
   <div class="cards">
-    <div class="price"><h3>C$100</h3><p>Heroico</p><button class="btn">NO DISPONIBLE</button></div>
-    <div class="price"><h3>C$200</h3><p>Maestro</p><button class="btn">NO DISPONIBLE</button></div>
+
+    <div class="price">
+      <img src="assets/heroico.png">
+      <h3>HEROICO</h3>
+      <p>C$100</p>
+      <button class="btn" onclick="buy()">COMPRAR</button>
+    </div>
+
+    <div class="price">
+      <img src="assets/maestro.png">
+      <h3>MAESTRO</h3>
+      <p>C$200</p>
+      <button class="btn" onclick="buy()">COMPRAR</button>
+    </div>
+
   </div>
 </section>
 
@@ -318,7 +357,7 @@ h2{
       <div class="review"><h4>Marco ★★★★★</h4><p>Recomendado 💯</p></div>
 
       <div class="review"><h4>Uriel ★★★★★</h4><p>Subí a Heroico en horas 🔥</p></div>
-      <div class="review"><h4>Kevin ★★★★★</h4><p>No me arriezgue, lo disfrute.</p></div>
+      <div class="review"><h4>Kevin ★★★★★</h4><p>No me arriesgué, lo disfruté.</p></div>
       <div class="review"><h4>Pablo ★★★★★</h4><p>Ufff, los mejores en esto</p></div>
       <div class="review"><h4>Andri ★★★★★</h4><p>Recomendado a todos mis familiares</p></div>
 
@@ -326,9 +365,31 @@ h2{
   </div>
 </section>
 
+<!-- TIKTOK REAL -->
+<section id="tiktok">
+  <h2>COMUNIDAD</h2>
+
+  <div style="display:flex;justify-content:center;">
+    <blockquote class="tiktok-embed" 
+      cite="https://www.tiktok.com/@arcaraz_acarreos" 
+      data-unique-id="arcaraz_acarreos" 
+      data-embed-type="creator"
+      style="max-width:780px; min-width:320px;">
+      <section></section>
+    </blockquote>
+  </div>
+
+</section>
+
+<script async src="https://www.tiktok.com/embed.js"></script>
+
 <script>
 function go(id){
   document.getElementById(id).scrollIntoView({behavior:"smooth"});
+}
+
+function buy(){
+  window.open("https://wa.me/505XXXXXXXX", "_blank");
 }
 
 window.onscroll = () => {
