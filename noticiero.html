@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>Noticiero - Arcaraz</title>
 
+<link rel="icon" href="favicon.jpeg">
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
@@ -27,20 +29,32 @@ body::before{
   z-index:-1;
 }
 
+/* NAV */
+nav{
+  display:flex;
+  justify-content:space-between;
+  padding:20px 60px;
+  background:rgba(0,0,0,0.7);
+  backdrop-filter:blur(10px);
+}
+
+nav img{
+  height:50px;
+}
+
 /* HERO */
 .hero{
   text-align:center;
-  padding:120px 20px;
+  padding:100px 20px;
 }
 
 .hero h1{
   font-size:70px;
-  color:#ff0000;
-  text-shadow:0 0 20px red,0 0 60px red;
+  background:linear-gradient(90deg,#ff0000,#ff4d4d);
+  -webkit-background-clip:text;
+  color:transparent;
   animation:glow 2s infinite alternate;
 }
-
-.hero p{color:#aaa;}
 
 /* GRID */
 .grid{
@@ -53,9 +67,9 @@ body::before{
 
 /* CARD */
 .card{
-  width:260px;
+  width:280px;
   background:#111;
-  border-radius:15px;
+  border-radius:20px;
   overflow:hidden;
   border:1px solid rgba(255,0,0,0.2);
   transition:0.4s;
@@ -63,21 +77,44 @@ body::before{
 }
 
 .card:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 25px red;
+  transform:translateY(-10px) scale(1.05);
+  box-shadow:0 0 30px red;
 }
 
 /* MEDIA */
 .card img,
-.card video{
+.card video,
+.card iframe{
   width:100%;
-  height:auto;
-  object-fit:contain;
 }
 
-.card-content{padding:10px;}
-.card h3{color:red;}
-.card p{color:#ccc;font-size:13px;}
+/* CONTENIDO */
+.card-content{
+  padding:15px;
+}
+
+.card h3{
+  color:red;
+  margin-bottom:10px;
+}
+
+.card p{
+  color:#ccc;
+  font-size:14px;
+}
+
+/* VISTAS */
+.views{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:#aaa;
+  margin-top:10px;
+}
+
+.views span{
+  font-size:14px;
+}
 
 /* MODAL */
 .modal{
@@ -113,9 +150,12 @@ body::before{
 
 <body>
 
+<nav>
+  <img src="assets/logo.png">
+</nav>
+
 <div class="hero">
   <h1>NOTICIERO</h1>
-  <p>Actualizaciones en tiempo real</p>
 </div>
 
 <div class="grid" id="news"></div>
@@ -126,16 +166,12 @@ body::before{
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCnL_0Xc9ekk_kBcp-wCTBDAhQVu2u4wz4",
   authDomain: "vps1-ec6a1.firebaseapp.com",
-  projectId: "vps1-ec6a1",
-  storageBucket: "vps1-ec6a1.firebasestorage.app",
-  messagingSenderId: "204349845179",
-  appId: "1:204349845179:web:d864250ace6c7b72b9439e",
-  measurementId: "G-07PRMWGY3E"
+  projectId: "vps1-ec6a1"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -146,47 +182,49 @@ const container = document.getElementById("news");
 onSnapshot(collection(db,"news"), snapshot=>{
   container.innerHTML = "";
 
-  snapshot.forEach(doc=>{
-    const data = doc.data();
+  snapshot.forEach(docSnap=>{
+    const data = docSnap.data();
+    const id = docSnap.id;
 
     let media = "";
 
-    // VIDEO YOUTUBE
     if(data.video && data.video.includes("youtube")){
-      const videoId = data.video.split("v=")[1]?.split("&")[0];
-      media = `<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+      const vid = data.video.split("v=")[1]?.split("&")[0];
+      media = `<iframe src="https://www.youtube.com/embed/${vid}"></iframe>`;
     }
-    // VIDEO NORMAL
     else if(data.video){
-      media = `<video src="${data.video}" controls></video>`;
+      media = `<video src="${data.video}" muted></video>`;
     }
-    // IMAGEN
     else if(data.image){
       media = `<img src="${data.image}">`;
     }
 
     container.innerHTML += `
-      <div class="card" onclick='openModal(${JSON.stringify(data)})'>
+      <div class="card" onclick='openModal(${JSON.stringify(data)}, "${id}")'>
         ${media}
         <div class="card-content">
           ${data.title ? `<h3>${data.title}</h3>` : ""}
           ${data.text ? `<p>${data.text}</p>` : ""}
+          
+          <div class="views">
+            👁️ <span>${data.views || 0}</span>
+          </div>
         </div>
       </div>
     `;
   });
 });
 
-/* MODAL */
-window.openModal = function(data){
+/* MODAL + SUMAR VISTA */
+window.openModal = async function(data, id){
   const modal = document.getElementById("modal");
   const content = document.getElementById("modalContent");
 
   let media = "";
 
   if(data.video && data.video.includes("youtube")){
-    const videoId = data.video.split("v=")[1]?.split("&")[0];
-    media = `<iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
+    const vid = data.video.split("v=")[1]?.split("&")[0];
+    media = `<iframe src="https://www.youtube.com/embed/${vid}" allowfullscreen></iframe>`;
   }
   else if(data.video){
     media = `<video src="${data.video}" controls autoplay></video>`;
@@ -202,6 +240,12 @@ window.openModal = function(data){
   `;
 
   modal.style.display="flex";
+
+  /* SUMAR VISTA */
+  const ref = doc(db,"news",id);
+  await updateDoc(ref,{
+    views: increment(1)
+  });
 }
 
 window.closeModal = function(){
