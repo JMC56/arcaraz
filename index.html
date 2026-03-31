@@ -252,7 +252,7 @@ h2{
   display:flex;
   gap:30px;
   width:max-content;
-  animation:scroll 18s linear infinite;
+  animation:scroll 20s linear infinite;
 }
 
 .review{
@@ -290,6 +290,7 @@ h2{
   </ul>
 </nav>
 
+<!-- HERO -->
 <section class="hero" id="hero">
   <div class="hero-text">
     <h1>ACARREOS<br>FREE FIRE</h1>
@@ -313,6 +314,7 @@ h2{
   </div>
 </section>
 
+<!-- SERVICIOS -->
 <section id="servicios">
   <h2>SERVICIOS</h2>
   <div class="cards">
@@ -322,42 +324,60 @@ h2{
   </div>
 </section>
 
+<!-- PRECIOS -->
 <section id="precios">
   <h2>PRECIOS</h2>
   <div class="cards">
-    <div class="price">
-      <img src="assets/heroico.png">
-      <h3>HEROICO</h3>
-      <p>C$100</p>
-      <button class="btn" onclick="buy()">COMPRAR</button>
-    </div>
-
-    <div class="price">
-      <img src="assets/maestro.png">
-      <h3>MAESTRO</h3>
-      <p>C$200</p>
-      <button class="btn" onclick="buy()">COMPRAR</button>
-    </div>
-
-    <div class="price">
-      <img src="assets/estrella.png">
-      <h3>ESTRELLA</h3>
-      <p>C$10</p>
-      <button class="btn" onclick="buy()">COMPRAR</button>
-    </div>
+    <div class="price"><img src="assets/heroico.png"><h3>HEROICO</h3><p>C$100</p><button class="btn" onclick="buy()">COMPRAR</button></div>
+    <div class="price"><img src="assets/maestro.png"><h3>MAESTRO</h3><p>C$200</p><button class="btn" onclick="buy()">COMPRAR</button></div>
+    <div class="price"><img src="assets/estrella.png"><h3>ESTRELLA</h3><p>C$10</p><button class="btn" onclick="buy()">COMPRAR</button></div>
   </div>
 </section>
 
+<!-- RESEÑAS -->
 <section id="reseñas">
   <h2>RESEÑAS</h2>
   <div class="reviews-container">
-    <div class="slider">
-      <div class="review"><h4>Kodeesx ★★★★</h4><p>Muy recomendado</p></div>
-      <div class="review"><h4>Max ★★★★★</h4><p>Confiable</p></div>
-      <div class="review"><h4>Tulio ★★★★★</h4><p>Excelentes jugadores</p></div>
-    </div>
+    <div class="slider" id="reviews"></div>
   </div>
 </section>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_DOMINIO",
+  projectId: "TU_PROJECT_ID",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+async function cargarReseñas(){
+  const cont = document.getElementById("reviews");
+  const querySnapshot = await getDocs(collection(db, "reseñas"));
+
+  let html = "";
+
+  querySnapshot.forEach(doc => {
+    const r = doc.data();
+    let estrellas = "★".repeat(r.rating) + "☆".repeat(5 - r.rating);
+
+    html += `
+      <div class="review">
+        <h4>${r.nombre} ${estrellas}</h4>
+        <p>${r.desc}</p>
+      </div>
+    `;
+  });
+
+  cont.innerHTML = html + html; // duplicado para scroll infinito
+}
+
+cargarReseñas();
+</script>
 
 <script>
 function go(id){
@@ -366,12 +386,8 @@ function go(id){
 
 function buy(){
   const mensaje = "Estoy interesado en sus servicios.";
-  const confirmar = confirm("PARA SER ATENDIDO ESCRIBE:\n\n" + mensaje + "\n\nPresiona ACEPTAR para continuar");
-
-  if(confirmar){
-    const url = "https://wa.me/50584162367?text=" + encodeURIComponent(mensaje);
-    window.open(url, "_blank");
-  }
+  const url = "https://wa.me/50584162367?text=" + encodeURIComponent(mensaje);
+  window.open(url, "_blank");
 }
 
 window.onscroll = () => {
