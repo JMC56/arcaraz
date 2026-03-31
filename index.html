@@ -290,7 +290,6 @@ h2{
   </ul>
 </nav>
 
-<!-- HERO -->
 <section class="hero" id="hero">
   <div class="hero-text">
     <h1>ACARREOS<br>FREE FIRE</h1>
@@ -314,21 +313,18 @@ h2{
   </div>
 </section>
 
-<!-- SERVICIOS -->
 <section id="servicios">
   <h2>SERVICIOS</h2>
   <div class="cards">
-    <div class="card"><img src="assets/icon1.png"><h3>Acarreo Ranked</h3><p>Te subimos la cuenta al rango que elijas en tu compra.</p></div>
-    <div class="card"><img src="assets/icon2.png"><h3>Squad Pro</h3><p>Equipo competitivo dispuesto a ayudarte lo mas posible a lograr tu meta.</p></div>
-    <div class="card"><img src="assets/icon3.png"><h3>Entrega Rápida</h3><p>Resultados inmediatos en menos de 6 dias realizado por nuestro Staff de excelencia.</p></div>
+    <div class="card"><img src="assets/icon1.png"><h3>Acarreo Ranked</h3><p>Te subimos la cuenta al rango que elijas.</p></div>
+    <div class="card"><img src="assets/icon2.png"><h3>Squad Pro</h3><p>Equipo competitivo listo para ayudarte.</p></div>
+    <div class="card"><img src="assets/icon3.png"><h3>Entrega Rápida</h3><p>Resultados en menos de 6 días.</p></div>
   </div>
 </section>
 
-<!-- PRECIOS -->
 <section id="precios">
   <h2>PRECIOS</h2>
   <div class="cards">
-
     <div class="price">
       <img src="assets/heroico.png">
       <h3>HEROICO</h3>
@@ -349,66 +345,31 @@ h2{
       <p>C$10</p>
       <button class="btn" onclick="buy()">COMPRAR</button>
     </div>
-
   </div>
 </section>
 
-<!-- RESEÑAS -->
 <section id="reseñas">
   <h2>RESEÑAS</h2>
   <div class="reviews-container">
     <div class="slider">
-
-      <div class="review"><h4>Kodeesx ★★★★</h4><p>Mi primera vez en heroico muy recomendable</p></div>
-      <div class="review"><h4>Max ★★★★★</h4><p>Muy confiable</p></div>
-      <div class="review"><h4>Tulio ★★★★★</h4><p>Muy buenos jugadores</p></div>
-      <div class="review"><h4>Marco ★★★★★</h4><p>Recomendado 💯</p></div>
-
-      <div class="review"><h4>Uriel ★★★★★</h4><p>Subí a Heroico en horas 🔥</p></div>
-      <div class="review"><h4>Kevin ★★★★★</h4><p>No me arriesgué, lo disfruté.</p></div>
-      <div class="review"><h4>Pablo ★★★★★</h4><p>Ufff, los mejores en esto</p></div>
-      <div class="review"><h4>Andri ★★★★★</h4><p>Recomendado a todos mis familiares</p></div>
-
+      <div class="review"><h4>Kodeesx ★★★★</h4><p>Muy recomendado</p></div>
+      <div class="review"><h4>Max ★★★★★</h4><p>Confiable</p></div>
+      <div class="review"><h4>Tulio ★★★★★</h4><p>Excelentes jugadores</p></div>
     </div>
   </div>
 </section>
-
-<!-- TIKTOK REAL -->
-<section id="tiktok">
-  <h2>COMUNIDAD</h2>
-
-  <div style="display:flex;justify-content:center;">
-    <blockquote class="tiktok-embed" 
-      cite="https://www.tiktok.com/@arcaraz_acarreos" 
-      data-unique-id="arcaraz_acarreos" 
-      data-embed-type="creator"
-      style="max-width:780px; min-width:320px;">
-      <section></section>
-    </blockquote>
-  </div>
-
-</section>
-
-<script async src="https://www.tiktok.com/embed.js"></script>
 
 <script>
 function go(id){
   document.getElementById(id).scrollIntoView({behavior:"smooth"});
 }
 
-<script>
 function buy(){
-
   const mensaje = "Estoy interesado en sus servicios.";
+  const confirmar = confirm("PARA SER ATENDIDO ESCRIBE:\n\n" + mensaje + "\n\nPresiona ACEPTAR para continuar");
 
-  // Mostrar cuadro con texto para copiar
-  const copiar = confirm("PARA SER ATENDIDO ESCRIBE:\n\n" + mensaje + "\n\nPresiona ACEPTAR para ir a WhatsApp");
-
-  if(copiar){
-    // Redirigir con mensaje ya incluido
-    const numero = "50584162367";
-    const url = "https://wa.me/" + numero + "?text=" + encodeURIComponent(mensaje);
-
+  if(confirmar){
+    const url = "https://wa.me/50584162367?text=" + encodeURIComponent(mensaje);
     window.open(url, "_blank");
   }
 }
