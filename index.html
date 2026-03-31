@@ -361,7 +361,7 @@ const db = getFirestore(app);
 
 async function cargarReseñas(){
   const cont = document.getElementById("reviews");
-  const querySnapshot = await getDocs(collection(db, "reseñas"));
+  const querySnapshot = await getDocs(collection(db, "resenas"));
 
   let html = "";
 
