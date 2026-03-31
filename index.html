@@ -396,8 +396,21 @@ function go(id){
   document.getElementById(id).scrollIntoView({behavior:"smooth"});
 }
 
+<script>
 function buy(){
-  window.open("https://wa.me/50584162367", "_blank");
+
+  const mensaje = "Estoy interesado en sus servicios.";
+
+  // Mostrar cuadro con texto para copiar
+  const copiar = confirm("PARA SER ATENDIDO ESCRIBE:\n\n" + mensaje + "\n\nPresiona ACEPTAR para ir a WhatsApp");
+
+  if(copiar){
+    // Redirigir con mensaje ya incluido
+    const numero = "50584162367";
+    const url = "https://wa.me/" + numero + "?text=" + encodeURIComponent(mensaje);
+
+    window.open(url, "_blank");
+  }
 }
 
 window.onscroll = () => {
