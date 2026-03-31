@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enviar Reseña</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+body{
+  background:#000;
+  color:white;
+  font-family:'Orbitron', sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+/* CAJA */
+.box{
+  background:#111;
+  padding:30px;
+  border-radius:20px;
+  width:350px;
+  border:1px solid #330000;
+  box-shadow:0 0 25px red;
+}
+
+h2{
+  text-align:center;
+  color:#ff0000;
+}
+
+/* INPUTS */
+input, textarea{
+  width:100%;
+  margin-top:12px;
+  padding:12px;
+  background:#000;
+  border:1px solid #330000;
+  color:white;
+  border-radius:10px;
+}
+
+/* ESTRELLAS */
+.stars{
+  display:flex;
+  justify-content:center;
+  margin:15px 0;
+}
+
+.star{
+  font-size:32px;
+  cursor:pointer;
+  color:#444;
+  transition:0.2s;
+}
+
+.star.active{
+  color:#ff0000;
+  text-shadow:0 0 10px red;
+}
+
+/* BOTON */
+button{
+  width:100%;
+  padding:15px;
+  background:#ff0000;
+  border:none;
+  border-radius:30px;
+  color:white;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+button:hover{
+  box-shadow:0 0 15px red;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>Enviar Reseña</h2>
+
+  <input id="nombre" placeholder="Tu nombre">
+  <textarea id="desc" placeholder="Tu experiencia"></textarea>
+
+  <div class="stars" id="stars"></div>
+
+  <button onclick="enviar()">ENVIAR</button>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+// 🔥 TU CONFIG
+const firebaseConfig = {
+  apiKey: "AIzaSyCnL_0Xc9ekk_kBcp-wCTBDAhQVu2u4wz4",
+  authDomain: "vps1-ec6a1.firebaseapp.com",
+  projectId: "vps1-ec6a1",
+  storageBucket: "vps1-ec6a1.firebasestorage.app",
+  messagingSenderId: "204349845179",
+  appId: "1:204349845179:web:d864250ace6c7b72b9439e",
+  measurementId: "G-07PRMWGY3E"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// ⭐ ESTRELLAS
+let rating = 0;
+const starContainer = document.getElementById("stars");
+
+for(let i=1;i<=5;i++){
+  const s = document.createElement("span");
+  s.innerHTML = "★";
+  s.classList.add("star");
+
+  s.onclick = () => {
+    rating = i;
+    document.querySelectorAll(".star").forEach((st, index)=>{
+      st.classList.toggle("active", index < i);
+    });
+  };
+
+  starContainer.appendChild(s);
+}
+
+// 🚀 ENVIAR
+window.enviar = async function(){
+
+  if(localStorage.getItem("reseña_enviada")){
+    alert("Ya enviaste una reseña desde este dispositivo");
+    return;
+  }
+
+  const nombre = document.getElementById("nombre").value.trim();
+  const desc = document.getElementById("desc").value.trim();
+
+  if(!nombre || !desc || rating === 0){
+    alert("Completa todos los campos");
+    return;
+  }
+
+  try{
+    await addDoc(collection(db, "reseñas"), {
+      nombre,
+      desc,
+      rating,
+      fecha: Date.now()
+    });
+
+    localStorage.setItem("reseña_enviada", true);
+
+    alert("Reseña enviada correctamente 🔥");
+
+    document.getElementById("nombre").value = "";
+    document.getElementById("desc").value = "";
+
+  }catch(e){
+    alert("Error al enviar reseña");
+    console.error(e);
+  }
+};
+</script>
+
+</body>
+</html>
